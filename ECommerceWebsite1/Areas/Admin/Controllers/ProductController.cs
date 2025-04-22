@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ECommerceWebsite.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using ECommerceWebsite.Models;
 
 namespace ECommerceWebsite.Areas.Admin.Controllers
 {
@@ -130,37 +131,48 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
         //    return View(category);
         //}
 
-        [HttpGet]
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (!id.HasValue || id == 0)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var category = _unitOfWork.Category.GetT(x => x.Id == id);
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(category);
+        //}
+
+        #region DeleteAPICALL
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (!id.HasValue || id == 0)
+            var product = _unitOfWork.Product.GetT(x => x.Id == id);
+            if (product == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Error in fetching data" });
+            }
+            else
+            {
+                var oldImagePath = Path.Combine(_hostingEnvironment.WebRootPath, product.ImageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+                _unitOfWork.Product.Delete(product);
+                _unitOfWork.Save();
+                return Json(new { success = true, message = "Product Deleted" });
+
             }
 
-            var category = _unitOfWork.Category.GetT(x => x.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
 
-            return View(category);
+
         }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteData(int? id)
-        {
-            var category = _unitOfWork.Category.GetT(x => x.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _unitOfWork.Category.Delete(category);
-            _unitOfWork.Save();
-            TempData["Success"] = "Category Deleted Done!";
-            return RedirectToAction("Index");
-        }
+        #endregion
     }
 }
