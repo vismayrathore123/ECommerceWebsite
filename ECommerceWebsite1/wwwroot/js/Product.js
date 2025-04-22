@@ -17,7 +17,7 @@ $(document).ready(function () {
                         <a href="/Admin/Product/CreateUpdate?id=${data}" class="btn btn-sm btn-primary">
                             <i class="bi bi-pencil-square"></i> Edit
                         </a>
-                        <a href="/Admin/Product/Delete?id=${data}" class="btn btn-sm btn-danger">
+                        <a onclick=RemoveProduct("/Admin/Product/Delete/${data}") class="btn btn-sm btn-danger">
                             <i class="bi bi-trash"></i> Delete
                         </a>
                     `;
@@ -26,3 +26,33 @@ $(document).ready(function () {
         ]
     });
 });
+function RemoveProduct(url) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You want to delete this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        dtable.ajax.reload();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function (err) {
+                    toastr.error("Something went wrong.");
+                }
+            });
+        }
+    });
+}
+
