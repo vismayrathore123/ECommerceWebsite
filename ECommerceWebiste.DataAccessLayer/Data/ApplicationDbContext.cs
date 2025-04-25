@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ECommerceWebsite.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 
 namespace ECommerceWebsite.DataAccessLayer
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
