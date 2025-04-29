@@ -2,7 +2,7 @@ using System.Diagnostics;
 using ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository;
 using ECommerceWebsite.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
+
 
 namespace ECommerceWebsite.Areas.Customer.Controllers
 {
@@ -16,12 +16,25 @@ namespace ECommerceWebsite.Areas.Customer.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
             IEnumerable<Product> products = _unitOfWork.Product.GetAll(includeProperties:"Category");
             return View(products);
         }
+
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            Cart cart = new Cart()
+            {
+                 Product = _unitOfWork.Product.GetT(x=>x.Id==id, includeProperties: "Category"),
+                 Count=1
+            };
+            return View(cart);
+          }
+           
+        
 
         public IActionResult Privacy()
         {
