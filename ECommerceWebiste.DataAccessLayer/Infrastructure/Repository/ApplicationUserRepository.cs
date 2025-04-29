@@ -8,10 +8,10 @@ using ECommerceWebsite.Models;
 
 namespace ECommerceWebsite.DataAccessLayer.Infrastructure.Repository
 {
-    public class ApplicationRepository : Repository<ApplicationUser>, IApplicationUser
+    public class ApplicationUserRepository : Repository<ApplicationUser>, IApplicationUser
     {
         private ApplicationDbContext _context;
-        public ApplicationRepository(ApplicationDbContext context) : base(context)
+        public ApplicationUserRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }

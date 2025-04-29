@@ -10,7 +10,7 @@ namespace ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository
     public interface IUnitOfWork
     {
         ICategoryRepository Category { get; }
-        IProdcutRepository Product  { get; }
+        IProductRepository Product  { get; }
         IApplicationUser ApplicationUser { get; }
         ICartRepository Cart { get; } 
         void Save();
