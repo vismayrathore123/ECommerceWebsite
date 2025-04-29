@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECommerceWebiste.DataAccessLayer\ECommerceWebiste.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\ECommerceWebiste.DataAccessLayer\ECommerceWebsite.DataAccessLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

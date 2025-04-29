@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceWebsite", "ECommer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceWebsite.Models", "..\ECommerceWebsite.Models\ECommerceWebsite.Models.csproj", "{3C658EBF-98B2-4C56-8B3A-692E832903EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceWebiste.DataAccessLayer", "..\ECommerceWebiste.DataAccessLayer\ECommerceWebiste.DataAccessLayer.csproj", "{C0CED19E-154F-4083-80DF-0566382036CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceWebsite.DataAccessLayer", "..\ECommerceWebiste.DataAccessLayer\ECommerceWebsite.DataAccessLayer.csproj", "{C0CED19E-154F-4083-80DF-0566382036CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
