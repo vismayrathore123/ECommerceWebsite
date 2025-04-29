@@ -8,7 +8,7 @@ using ECommerceWebsite.Models;
 
 namespace ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository
 {
-    public interface IProdcutRepository:IRepository<Product>
+    public interface IProductRepository:IRepository<Product>
     {
         void Update(Product product);
         

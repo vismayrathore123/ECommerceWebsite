@@ -1,37 +1,31 @@
-﻿@using ECommerceWebsite.Models
+﻿@using ECommerceWebsite.Models.ViewModels
 @model Cart
 
-<h1>Product Details</h1>
-
+<h1> Product Details</h1>
 <form method="post">
     <div class="row">
         <div class="col-4">
-            <img src="@Model.Product.ImageUrl" width="200" height="200" alt="Product Image" />
+            <img src="@Model.Product.ImageUrl" width="200" height="200" />
+            <input type="hidden" asp-for="ProductId"/>
         </div>
         <div class="col-8">
-            <div class="mb-3">
-                <strong>Name:</strong> @Model.Product.Name
-            </div>
-            <div class="mb-3">
-                <strong>Description:</strong> @Model.Product.Description
-            </div>
-            <div class="mb-3">
-                <strong>Price:</strong> @Model.Product.Price.ToString("0.00")
-            </div>
-            <div class="mb-3">
-                <strong>Category:</strong> @Model.Product.Category?.Name
+            <div class="row">
+                <label asp-for="Product.Name">@Model.Product.Name</label>
+                <label asp-for="Product.Description">Product Description : @Model.Product.Description</label>
+                <label asp-for="Product.Price">Product Price : @Model.Product.Price.ToString("0.00")</label>
+                <label asp-for="Product.Category.Id">Product Category : @Model.Product.Category.Name</label>
+                <div class="form-control">
+                    <label asp-for="Count"></label>
+                    <input asp-for="Count" class="form-control" />
+                    <span asp-validation-for="Count" class="text-danger"></span>
+                </div>
+                <div class="form-control">
+                    <button class="btn btn-success" asp-action="Index" asp-controller="Home"> Back To List</button>
+                    <button type="submit" class="btn btn-dark" >Add To Cart</button>
+                </div>
+
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Count" class="form-label"></label>
-                <input asp-for="Count" class="form-control" />
-                <span asp-validation-for="Count" class="text-danger"></span>
-            </div>
-
-            <div class="mt-3">
-                <a class="btn btn-success" asp-action="Index" asp-controller="Home">Back To List</a>
-                <button type="submit" class="btn btn-dark">Add To Cart</button>
-            </div>
         </div>
     </div>
 </form>

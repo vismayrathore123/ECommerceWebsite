@@ -8,7 +8,7 @@ using ECommerceWebsite.Models;
 
 namespace ECommerceWebsite.DataAccessLayer.Infrastructure.Repository
 {
-    public class ProductRepository : Repository<Product>, IProdcutRepository
+    public class ProductRepository : Repository<Product>, IProductRepository
     {
         private ApplicationDbContext _context;
         public ProductRepository(ApplicationDbContext context) : base(context)

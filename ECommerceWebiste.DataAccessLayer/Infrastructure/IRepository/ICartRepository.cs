@@ -10,7 +10,7 @@ namespace ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository
 {
     public interface ICartRepository:IRepository<Cart>
     {
-        void Update(Category category);
+        int IncrementCartItem(Cart cart, int count);
         
     }
 }
