@@ -1,7 +1,9 @@
-﻿using ECommerceWebsite.DataAccessLayer;
+﻿using ECommerceWebsite.CommonHelper;
+using ECommerceWebsite.DataAccessLayer;
 using ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository;
 using ECommerceWebsite.DataAccessLayer.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
