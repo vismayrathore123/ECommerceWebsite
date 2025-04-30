@@ -1,0 +1,31 @@
+# Build Folders
+bin/
+obj/
+
+# User-specific files
+*.csproj.user
+
+# Visual Studio and IDE settings
+.vs/
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Optional: Dev-only app settings (uncomment if needed)
+# appsettings.Development.json
+
+# Optional if you use these
+*.tsbuildinfo
+
+# -----------------------
+# Fix for wwwroot folder
+# -----------------------
+
+# Do NOT ignore wwwroot
+!wwwroot/
+
+# OPTIONAL: If you generate files inside wwwroot and want to ignore those, specify them
+# wwwroot/uploads/
+# wwwroot/js/build/

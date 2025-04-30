@@ -1,0 +1,22 @@
+﻿@{
+    var successMessage = TempData["Success"] as string;
+    var errorMessage = TempData["Error"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <script>
+        $(document).ready(function () {
+            toastr.success('@successMessage');
+        });
+    </script>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <script>
+        $(document).ready(function () {
+            toastr.error('@errorMessage');
+        });
+    </script>
+}

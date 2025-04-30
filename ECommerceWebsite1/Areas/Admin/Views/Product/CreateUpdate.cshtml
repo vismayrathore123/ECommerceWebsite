@@ -1,0 +1,104 @@
+﻿@using ECommerceWebsite.Models.ViewModels
+@model ProductVM
+
+<form asp-action="CreateUpdate" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for=Product.Id />
+    <input type="hidden" asp-for="Product.ImageUrl"/>
+
+    <div class="border p-3 mt-4">
+        <div class="row pb-3">
+            <h2 class="text-primary">@((Model.Product==null || Model.Product.Id==0)?"Create ":"Update") Product</h2>
+            <hr />
+        </div>
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+
+        <div class="row mb-3">
+            <label asp-for="Product.Name"></label>
+            <input asp-for="Product.Name" class="form-control" />
+            <span asp-validation-for="Product.Name" class="text-danger"></span>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="Product.Description"></label>
+            <textarea asp-for="Product.Description" class="form-control"></textarea>
+            <span asp-validation-for="Product.Description" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.Price"></label>
+            <input asp-for="Product.Price" class="form-control" />
+            <span asp-validation-for="Product.Price" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.ImageUrl"></label>
+            <input type="file" id="ImageFile" name="file" class="form-select" />
+
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.CategoryId"></label>
+            <select asp-for="Product.CategoryId" asp-items="Model.Categories as IEnumerable<SelectListItem>" class="form-control">
+                <option selected disabled>--Select Category--</option>
+
+            </select>
+            <span asp-validation-for="Product.Price" class="text-danger"></span>
+        </div>
+        @if (Model.Product == null || Model.Product.Id == 0)
+        {
+            <button type="submit" class="btn btn-primary" onclick="return ValidateEmpty()">Create</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-primary">Update</button>
+        }
+
+        <a asp-action="Index" class="btn btn-secondary ms-2">Back To List</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+<script>
+
+    
+        tinymce.init({
+            selector: 'textarea',
+        plugins: [
+        // Core editing features
+        'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+        // Your account includes a free trial of TinyMCE premium features
+        // Try the most popular premium features until May 6, 2025:
+        'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+        {value: 'First.Name', title: 'First Name' },
+        {value: 'Email', title: 'Email' },
+        ],
+    ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+  });
+
+
+
+        function ValidateEmpty() {
+            const imageInput = document.getElementById("ImageFile");
+
+         
+            if (imageInput.value === "") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Upload Image!",
+                    
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+}
