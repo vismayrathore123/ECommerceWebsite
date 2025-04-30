@@ -11,11 +11,13 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
     {
         private IUnitOfWork _unitOfWork;
         private IWebHostEnvironment _hostingEnvironment;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment hostingEnvironment)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment hostingEnvironment, ILogger<ProductController> logger)
         {
             _unitOfWork = unitOfWork;
             _hostingEnvironment = hostingEnvironment;
+            _logger = logger;
         }
         #region APICALL
         public IActionResult AllProducts()
@@ -67,49 +69,67 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateUpdate(ProductVM vm, IFormFile? file)
         {
-            if (ModelState.IsValid)
+            try
             {
-                string fileName = String.Empty;
-                if (file != null) {
-                    string uploadDir = Path.Combine(_hostingEnvironment.WebRootPath, "ProductImage");
-                    fileName = Guid.NewGuid().ToString() + "-" + file.FileName;
-                    string filePath= Path.Combine(uploadDir, fileName);
-                    if (vm.Product.ImageUrl != null)
+                if (ModelState.IsValid)
+                {
+                    string fileName = string.Empty;
+                    if (file != null)
                     {
-                        var oldImagePath = Path.Combine(_hostingEnvironment.WebRootPath, vm.Product.ImageUrl.TrimStart('\\'));
-                        if (System.IO.File.Exists(oldImagePath))
+                        string uploadDir = Path.Combine(_hostingEnvironment.WebRootPath, "ProductImage");
+                        Directory.CreateDirectory(uploadDir); // Ensure folder exists
+
+                        fileName = Guid.NewGuid().ToString() + "-" + Path.GetFileName(file.FileName); // Secure filename
+                        string filePath = Path.Combine(uploadDir, fileName);
+
+                        // Delete old image if it exists
+                        if (!string.IsNullOrEmpty(vm.Product.ImageUrl))
                         {
-                            System.IO.File.Delete(oldImagePath);
+                            _logger.LogInformation("Processing product image: {FileName}", fileName);
+                            var oldImagePath = Path.Combine(_hostingEnvironment.WebRootPath, vm.Product.ImageUrl.TrimStart(Path.DirectorySeparatorChar));
+                            if (System.IO.File.Exists(oldImagePath))
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
                         }
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+                        vm.Product.ImageUrl = Path.Combine("ProductImage", fileName).Replace("\\", "/"); // URL-safe
                     }
 
-
-                using(var fileStream=new FileStream(filePath, FileMode.Create))
+                    if (vm.Product.Id == 0)
                     {
-                        file.CopyTo(fileStream);
+                        _logger.LogInformation("Creating new product: {ProductName}", vm.Product.Name);
+                        _unitOfWork.Product.Add(vm.Product);
+                        TempData["Success"] = "Product created successfully.";
                     }
-                    vm.Product.ImageUrl = @"\ProductImage\" + fileName;
-                }
-                if (vm.Product.Id == 0)
-                {
-                    _unitOfWork.Product.Add(vm.Product);
-                    TempData["Success"] = "Product Created Done";
-                }
-                else
-                {
-                    _unitOfWork.Product.Update(vm.Product);
-                    TempData["Success"] = "Product Updated Done";
-
-                }
-
-
+                    else
+                    {
+                        _logger.LogInformation("Updating product: {ProductId}", vm.Product.Id);
+                        _unitOfWork.Product.Update(vm.Product);
+                        TempData["Success"] = "Product updated successfully.";
+                    }
 
                     _unitOfWork.Save();
+                    _logger.LogDebug("Product changes saved successfully.");
+                    return RedirectToAction("Index");
+                }
 
+                _logger.LogWarning("Invalid model state in Product CreateUpdate.");
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in Product CreateUpdate.");
+                
+                return RedirectToAction("Index");
+            }
         }
+
 
         //[HttpGet]
         //public IActionResult Create()

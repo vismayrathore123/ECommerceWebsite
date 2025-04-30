@@ -9,10 +9,11 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private IUnitOfWork _unitOfWork;
-
-        public CategoryController(IUnitOfWork unitOfWork)
+        private readonly ILogger<CategoryController> _logger;
+        public CategoryController(IUnitOfWork unitOfWork, ILogger<CategoryController> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -49,25 +50,37 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreateUpdate(CategoryVM vm)
-        {   
-            if (ModelState.IsValid) 
+        {
+            try
             {
-                if (vm.Category.Id == 0)
+                if (ModelState.IsValid)
                 {
-                    _unitOfWork.Category.Add(vm.Category);
-                    TempData["Success"] = "Category Created Done!";
-                }
-                else
-                {
-                    _unitOfWork.Category.Update(vm.Category);
-                    TempData["Success"] = "Category Updated Done!";
+                    if (vm.Category.Id == 0)
+                    {
+                        _logger.LogInformation("Creating new category: {CategoryName}", vm.Category.Name);
+                        _unitOfWork.Category.Add(vm.Category);
+                        TempData["Success"] = "Category Created Done!";
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Updating category ID {CategoryId}", vm.Category.Id);
+                        _unitOfWork.Category.Update(vm.Category);
+                        TempData["Success"] = "Category Updated Done!";
+                    }
+
+                    _unitOfWork.Save();
+                    _logger.LogDebug("Category changes saved successfully");
+                    return RedirectToAction("Index");
                 }
 
-                _unitOfWork.Save();
-              
+                _logger.LogWarning("Invalid model state in Category CreateUpdate");
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in Category CreateUpdate");
+                throw;
+            }
         }
 
         //[HttpGet]
