@@ -13,8 +13,11 @@ namespace ECommerceWebsite.DataAccessLayer
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+<<<<<<< HEAD
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
+=======
+>>>>>>> 0f41ecb319ec501ab80862ccfd4a2428a21f297b
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
