@@ -21,5 +21,10 @@ namespace ECommerceWebsite.DataAccessLayer.Infrastructure.Repository
             cart.Count += count;
             return cart.Count;
         }
+        public int DecrementCartItem(Cart cart, int count)
+        {
+            cart.Count -= count;
+            return cart.Count;
+        }
     }
 }
