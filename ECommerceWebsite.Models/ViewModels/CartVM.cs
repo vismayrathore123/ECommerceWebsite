@@ -10,5 +10,6 @@ namespace ECommerceWebsite.Models.ViewModels
     {
         
         public IEnumerable <Cart> ListOfCart { get; set; } 
+        public  double Total { get; set; }
     }
 }
