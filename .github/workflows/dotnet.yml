@@ -1,0 +1,35 @@
+name: CI/CD from Azure DevOps Repo - .NET 8 (No Tests)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Clone Azure DevOps Repository
+      run: |
+        git clone https://vismayrathore2021@dev.azure.com/vismayrathore2021/EcommerceWebiste/_git/EcommerceWebiste
+        cd EcommerceWebiste
+      env:
+        GIT_ASKPASS: echo
+        GIT_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+        GIT_PASSWORD: ${{ secrets.AZURE_DEVOPS_PAT }}
+
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: EcommerceWebiste
+
+    - name: Build project
+      run: dotnet build --configuration Release --no-restore
+      working-directory: EcommerceWebiste
+
+    # Optional: Add deployment steps below
